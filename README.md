@@ -1,6 +1,6 @@
 
 # Franka
-This repo contains instructions and codes for setting up and using the Franka Emika robot in katefgroup, CMU.
+This repo contains instructions and codes for setting up and operating the Franka Emika robot in katefgroup, CMU.
 
 ## System Setup
 We use `franka_interface` and `frankapy` packages from Oliver's lab to control Franka. We neet to setup a Control PC (talks to robot) and a FrankaPy PC (sends user command).
@@ -17,11 +17,11 @@ We use `franka_interface` and `frankapy` packages from Oliver's lab to control F
 - FrankaPy PC
     - install ubuntu 20.04 and ROS Noetic
     - follow https://iamlab-cmu.github.io/frankapy/
-        - create conda env: `franka`
+        - create conda env: `franka`, and add it to your `.bashrc`.
         - I put `frankapy` under this repo (`franka/`) to be able to customize it. Need to clone it there first before any catkin building.
         - the original script is a bit buggy when handling the flags.
 - **Notes**
-    - franka webpage GUI
+    - Franka's web GUI
         - username: `franka`
         - password: `katefgroup`
     - Network configuration
@@ -45,12 +45,36 @@ We use `franka_interface` and `frankapy` packages from Oliver's lab to control F
             - External
                 - FrankaPy PC `128.*`
 
-## Run the robot
+## Operate the robot
+### Steps
+1. Turn on the Control PC (`franka-control`)
+2. Lift up the red button and black button
+3. Wait for the flashing yellow light to turn steady
+3. In FrankaPy PC (`katef005`)
+    - go to https://192.168.1.1 (Franka's web GUI)
+    - click to unlock the system
+4. Under this repo:
+    ```
+    bash frankapy/bash_scripts/start_control_pc.sh -u katefgroup -i franka-control -d /home/katefgroup/franka-interface -a 192.168.1.1 
+    ```
+5. (Optional) Resetting the arm:
+    ```
+    python frankapy/scripts/reset_arm.py
+    ```
+There are some other useful scripts in `franka/frankapy/scripts`.
 
 
-```
-bash frankapy/bash_scripts/start_control_pc.sh -u katefgroup -i franka-control -d /home/katefgroup/franka-interface -a 192.168.1.1 
-```
+### Steps for shutting down
+1. Shut all the terminal windows
+2. Lock the robot in franka web GUI
+3. Press down the red button and the black button
+4. (Optional) Shut down the Control PC.
+
+## Camera
+    ```
+    roslaunch azure_kinect_ros_driver driver_azcam_top.launch fps:=30 color_resolution:=720P
+    ```
+### Useful tools
 
 ## Teleoperation
 We use SpaceMouse to teleop the franka arm.
