@@ -101,7 +101,7 @@ def test():
         for i in range(2000):
             # print(sm.get_motion_state())
             print(sm.get_motion_state_transformed())
-            print(sm.is_button_pressed(0))
+            print(sm.is_button_pressed(0), sm.is_button_pressed(1))
             time.sleep(1/100)
 
 if __name__ == '__main__':

@@ -46,6 +46,8 @@ We use `franka_interface` and `frankapy` packages from Oliver's lab to control F
                 - FrankaPy PC `128.*`
 
 ## Operate the robot
+**Important**: whenever the robot is in operation, always be prepared to press the stop (black) button.
+
 ### Steps
 1. Turn on the Control PC (`franka-control`)
 2. Lift up the red button and black button
@@ -57,6 +59,7 @@ We use `franka_interface` and `frankapy` packages from Oliver's lab to control F
     ```
     bash frankapy/bash_scripts/start_control_pc.sh -u katefgroup -i franka-control -d /home/katefgroup/franka-interface -a 192.168.1.1 
     ```
+    This should open 4 terminal windows.
 5. (Optional) Resetting the arm:
     ```
     python frankapy/scripts/reset_arm.py
@@ -70,19 +73,28 @@ There are some other useful scripts in `franka/frankapy/scripts`.
 3. Press down the red button and the black button
 4. (Optional) Shut down the Control PC.
 
+### Trouble Shooting
+- Light
+    - flashing yellow: booting
+    - steady yellow: ready
+- If the light does not light up, turn off both buttons and the control box. Unplug power, and then turn on everything again.
+
 ## Camera
-    ```
-    roslaunch azure_kinect_ros_driver driver_azcam_top.launch fps:=30 color_resolution:=720P
-    ```
+```
+roslaunch azure_kinect_ros_driver driver_azcam_top.launch fps:=30 color_resolution:=720P
+```
 ### Useful tools
 
 ## Teleoperation
-We use SpaceMouse to teleop the franka arm.
+We use SpaceMouse to teleop the franka arm. (credit to https://github.com/columbia-ai-robotics/diffusion_policy)
 
-Install dependencies. (credit to https://github.com/columbia-ai-robotics/diffusion_policy)
+### Set Up
+1. Install dependencies. 
 ```
-sudo apt install libspnav-dev spacenavd; sudo systemctl start spacenavd
+sudo apt install libspnav-dev spacenavd
+sudo systemctl start spacenavd
 pip install https://github.com/cheng-chi/spnav/archive/c1c938ebe3cc542db4685e0d13850ff1abfdb943.tar.gz
 ```
-Connect spacemouse via USB.
-Run `python realworld/spacemouse.py` to verify.
+2. Reboot.
+3. Connect spacemouse via USB.
+4. Run `python teleop/spacemouse.py`. Play with the device and you should be able to see realtime signal captured by the spacemouse.
