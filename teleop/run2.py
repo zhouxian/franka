@@ -8,8 +8,7 @@ from frankapy.proto import PosePositionSensorMessage, ShouldTerminateSensorMessa
 from franka_interface_msgs.msg import SensorDataGroup
 
 from frankapy.utils import min_jerk, min_jerk_weight
-from spacemouse import Spacemouse
-from scipy.spatial.transform import Rotation as R
+
 import rospy
 
 def activate(fa, duration=10):
@@ -17,7 +16,7 @@ def activate(fa, duration=10):
         cartesian_impedances=FC.DEFAULT_TRANSLATIONAL_STIFFNESSES + FC.DEFAULT_ROTATIONAL_STIFFNESSES
     )
 
-def publish_tgt_pose(fa, pose, pub):
+def goto_pose_dynamic(fa, pose):
     timestamp = rospy.Time.now().to_time()
 
     traj_gen_proto_msg = PosePositionSensorMessage(
@@ -43,49 +42,34 @@ if __name__ == "__main__":
     fa = FrankaArm()
     fa.reset_joints()
 
-    print('Ready...')
+    rospy.loginfo('Generating Trajectory')
+    p0 = fa.get_pose()
+    p1 = p0.copy()
+    T_delta = RigidTransform(
+        translation=np.array([0.2, 0.1, 0.3]),
+                            from_frame=p1.from_frame, to_frame=p1.from_frame)
+    p1 = p1 * T_delta
+    fa.goto_pose(p1, duration=5)
+
+    T_delta_2 = RigidTransform(
+        translation=np.array([0.0, -0.25, 0]),
+                            from_frame=p1.from_frame, to_frame=p1.from_frame)
+
+    p2 = p1 * T_delta_2
 
     T = 5
     dt = 0.02
     ts = np.arange(0, T, dt)
 
+    weights = [min_jerk_weight(t, T) for t in ts]
+    pose_traj = [p1.interpolate_with(p2, w) for w in weights]
+
     pub = rospy.Publisher(FC.DEFAULT_SENSOR_PUBLISHER_TOPIC, SensorDataGroup, queue_size=1000)
     rate = rospy.Rate(1 / dt)
 
-    activate(fa, duration=60)
+    activate(fa, duration=5)
 
-    max_pos_speed=0.15
-    max_rot_speed=0.15
-
-    target_pose = fa.get_pose()
-    gripper_open = True
-
-    with Spacemouse() as sm:
-        while True:
-            sm_state = sm.get_motion_state_transformed()
-            # print(sm_state)
-            dpos = sm_state[:3] * (max_pos_speed * dt)
-            drot_xyz = sm_state[3:] * (max_rot_speed * dt)
-
-            if not sm.is_button_pressed(0):
-                # translation mode
-                drot_xyz[:] = 0
-            else:
-                dpos[:] = 0
-
-            if sm.is_button_pressed(1):
-                if gripper_open:
-                    fa.close_gripper()
-                    gripper_open = False
-                else:
-                    fa.open_gripper()
-                    gripper_open = True
-
-            drot = R.from_euler('xyz', drot_xyz)
-            target_pose.translation += dpos
-            target_pose.rotation = (drot * R.from_matrix(target_pose.rotation)).as_matrix()
-
-            publish_tgt_pose(fa, target_pose, pub)
-            rate.sleep()
-
+    for i in range(len(ts)):
+        goto_pose_dynamic(fa, pose_traj[i])
+        rate.sleep()
 

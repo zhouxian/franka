@@ -49,7 +49,7 @@ We use `franka_interface` and `frankapy` packages from Oliver's lab to control F
 **Important**: whenever the robot is in operation, always be prepared to press the stop (black) button.
 
 ### Steps
-1. Turn on the Control PC (`franka-control`)
+1. Turn on the Control PC (`franka-control`) and the Control Box.
 2. Lift up the red button and black button
 3. Wait for the flashing yellow light to turn steady
 3. In FrankaPy PC (`katef005`)
@@ -64,14 +64,14 @@ We use `franka_interface` and `frankapy` packages from Oliver's lab to control F
     ```
     python frankapy/scripts/reset_arm.py
     ```
-There are some other useful scripts in `franka/frankapy/scripts`.
+There are some other useful scripts under `franka/frankapy/scripts/`.
 
 
 ### Steps for shutting down
 1. Shut all the terminal windows
 2. Lock the robot in franka web GUI
 3. Press down the red button and the black button
-4. (Optional) Shut down the Control PC.
+4. (Optional) Shut down the Control PC and the Control Box.
 
 ### Trouble Shooting
 - Light
@@ -98,3 +98,6 @@ pip install https://github.com/cheng-chi/spnav/archive/c1c938ebe3cc542db4685e0d1
 2. Reboot.
 3. Connect spacemouse via USB.
 4. Run `python teleop/spacemouse.py`. Play with the device and you should be able to see realtime signal captured by the spacemouse.
+
+### Operate
+Run `python frankapy/scripts/reset_arm.py`. Have fun!
