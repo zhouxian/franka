@@ -1,0 +1,23 @@
+# Skill state
+std_msgs/Header header
+int64 current_memory_region
+int64 current_sensor_region
+int64 current_feedback_region
+int64 current_skill_id 
+int64 current_skill_type
+int64 current_meta_skill_id
+int64 current_meta_skill_type
+string current_skill_description
+bool new_skill_available
+int64 new_skill_id
+int64 new_skill_type
+int64 new_meta_skill_id
+int64 new_meta_skill_type
+string new_skill_description
+bool is_running_skill
+bool skill_preempted
+int64 done_skill_id
+int64 result_skill_id
+float64 time_skill_started_in_robot_time
+float64 time_skill_finished_in_robot_time
+bool is_fresh

@@ -1,0 +1,7 @@
+Metadata-Version: 2.1
+Name: frankapy
+Version: 1.0.0
+Summary: FrankaPy Franka Panda Robot Control Library
+Author: Kevin Zhang, Mohit Sharma, Jacky Liang, Oliver Kroemer
+Author-email: 
+License-File: LICENSE

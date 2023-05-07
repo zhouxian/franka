@@ -1,0 +1,80 @@
+// franka-interface/proto/sensor_msg.proto and frankapy/protosensor_msg.proto should match
+
+syntax = "proto2";
+
+message BoundingBox {
+  required string name = 1;
+  required int32 id = 2;
+
+  required int32 x = 3;
+  required int32 y = 4;
+  required int32 w = 5;
+  required int32 h = 6;
+}
+
+message JointPositionVelocitySensorMessage {
+  required int32 id = 1;
+  required double timestamp = 2;
+  required double seg_run_time = 3;
+
+  repeated double joints = 4;
+  repeated double joint_vels = 5;
+}
+
+message PosePositionVelocitySensorMessage {
+  required int32 id = 1;
+  required double timestamp = 2;
+  required double seg_run_time = 3;
+
+  repeated double position = 4;
+  repeated double quaternion = 5;
+  repeated double pose_velocities = 6;
+}
+
+message JointPositionSensorMessage {
+  required int32 id = 1;
+  required double timestamp = 2;
+
+  repeated double joints = 3;
+}
+
+message PosePositionSensorMessage {
+  required int32 id = 1;
+  required double timestamp = 2;
+
+  repeated double position = 3;
+  repeated double quaternion = 4;
+}
+
+message ShouldTerminateSensorMessage {
+  required double timestamp = 1;
+  required bool should_terminate = 2;
+}
+
+message CartesianImpedanceSensorMessage {
+  required int32 id = 1;
+  required double timestamp = 2;
+
+  repeated double translational_stiffnesses = 3;
+  repeated double rotational_stiffnesses = 4;
+}
+
+message ForcePositionSensorMessage {
+  required int32 id = 1;
+  required double timestamp = 2;
+  required double seg_run_time = 3;
+
+  repeated double pose = 4;
+  repeated double force = 5;
+}
+
+message ForcePositionControllerSensorMessage {
+  required int32 id = 1;
+  required double timestamp = 2;
+
+  repeated double position_kps_cart = 3;
+  repeated double force_kps_cart = 4;
+  repeated double position_kps_joint = 5;
+  repeated double force_kps_joint = 6;
+  repeated double selection = 7;
+}

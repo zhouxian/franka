@@ -1,4 +1,9 @@
 
+
+```
+bash frankapy/bash_scripts/start_control_pc.sh -u katefgroup -i franka-control -d /home/katefgroup/franka-interface -a 192.168.1.1 
+```
+
 # Teleoperation
 We use SpaceMouse to teleop the franka arm.
 

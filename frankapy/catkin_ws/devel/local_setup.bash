@@ -1,0 +1,1 @@
+/home/zhouxian/git/franka/frankapy/catkin_ws/devel/.private/catkin_tools_prebuild/local_setup.bash

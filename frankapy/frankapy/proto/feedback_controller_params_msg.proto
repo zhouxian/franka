@@ -1,0 +1,32 @@
+syntax = "proto2";
+
+message CartesianImpedanceFeedbackControllerMessage {
+  repeated double translational_stiffnesses = 1;
+  repeated double rotational_stiffnesses = 2;
+}
+
+message ForceAxisFeedbackControllerMessage {
+  required double translational_stiffness = 1;
+  required double rotational_stiffness = 2;
+
+  repeated double axis = 3;
+}
+
+message JointImpedanceFeedbackControllerMessage {
+  repeated double k_gains = 1;
+  repeated double d_gains = 2;
+}
+
+message InternalImpedanceFeedbackControllerMessage {
+  repeated double cartesian_impedances = 1;
+  repeated double joint_impedances = 2;
+}
+
+message ForcePositionFeedbackControllerMessage {
+  repeated double position_kps_cart = 1;
+  repeated double force_kps_cart = 2;
+  repeated double position_kps_joint = 3;
+  repeated double force_kps_joint = 4;
+  repeated double selection = 5;
+  required bool use_cartesian_gains = 6;
+}
