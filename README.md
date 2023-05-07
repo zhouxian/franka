@@ -73,11 +73,17 @@ There are some other useful scripts under `franka/frankapy/scripts/`.
 3. Press down the red button and the black button
 4. (Optional) Shut down the Control PC and the Control Box.
 
+
+### Guiding mode
+Press down the black button and hold the two black button at the gripper. Now you are able to drag the end-effector.
+
 ### Trouble Shooting
 - Light
     - flashing yellow: booting
-    - steady yellow: ready
-- If the light does not light up, turn off both buttons and the control box. Unplug power, and then turn on everything again.
+    - steady yellow: locked
+    - blue: unclocked
+    - white: guiding mode
+- If the light does not light up, turn off both buttons and the control box, unplug power, and then turn on everything again.
 
 ## Camera
 ```
@@ -100,4 +106,4 @@ pip install https://github.com/cheng-chi/spnav/archive/c1c938ebe3cc542db4685e0d1
 4. Run `python teleop/spacemouse.py`. Play with the device and you should be able to see realtime signal captured by the spacemouse.
 
 ### Operate
-Run `python frankapy/scripts/reset_arm.py`. Have fun!
+Run `python teleop/run.py`. Have fun!
