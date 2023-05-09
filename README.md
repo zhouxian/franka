@@ -86,10 +86,54 @@ Press down the black button and hold the two black button at the gripper. Now yo
 - If the light does not light up, turn off both buttons and the control box, unplug power, and then turn on everything again.
 
 ## Camera
+We use Azure Kinect DK.
+### Install driver and ROS interface
+We need to install both Azure-Kinect-Sensor-SDK and Azure_Kinect_ROS_Driver. Since our frankpy pc is running 20.04, we need some additional hacks.
+
+I refered to these pages when installing: (put here as a reference)
+- Azure_Kinect_ROS_Driver: https://github.com/microsoft/Azure_Kinect_ROS_Driver
+- Azure-Kinect-Sensor-SDK: https://github.com/microsoft/Azure-Kinect-Sensor-SDK
+- https://github.com/juancarlosmiranda/azure_kinect_notes
+- https://github.com/microsoft/Azure-Kinect-Sensor-SDK/issues/1263#issuecomment-710698591
+
+Follow the following steps:
+- Install SDK.
+    ```
+    $ curl -sSL https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
+    $ sudo apt-add-repository https://packages.microsoft.com/ubuntu/18.04/prod
+    $ curl -sSL https://packages.microsoft.com/config/ubuntu/18.04/prod.list | sudo tee /etc/apt/sources.list.d/microsoft-prod.list
+    $ curl -sSL https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
+    $ sudo apt-get update
+    $ sudo apt install libk4a1.3-dev
+    $ sudo apt install libk4abt1.0-dev
+    $ sudo apt install k4a-tools=1.3.0
+    ```
+    Connect the camera, and run `sudo k4aviewer` to verify the SDK is working.
+- Go to https://github.com/microsoft/Azure-Kinect-Sensor-SDK/blob/develop/docs/usage.md, follow 'Linux Device Setup', replug the camera, and now you should be able to run `k4aviewer` without sudo.
+- Clone the ROS driver repo: https://github.com/microsoft/Azure_Kinect_ROS_Driver
+- Put the repo under your ROS catkin workspace, and catkin_make.
+    - If you have no idea what a catkin workspace is, follow http://wiki.ros.org/ROS/Tutorials/InstallingandConfiguringROSEnvironment and source the mentioned `setup.bash` in your `.bashrc`.
+- Install this: `sudo apt install ros-noetic-rgbd-launch`
+
+Restart your terminal to let the updated `.bashrc` take effect.
+
+### Using the camera
+If the above installation was successful, you should be able to launch the camera with the following command:
+
 ```
-roslaunch azure_kinect_ros_driver driver_azcam_top.launch fps:=30 color_resolution:=720P
+roslaunch azure_kinect_ros_driver kinect_rgbd.launch fps:=30 color_resolution:=720P
 ```
-### Useful tools
+This publishes camera signals to a bunch of ROS topics. To verify:
+
+```
+$ rostopic list # with this you should see a list of active ROS topics, among them there should be topics named /rgb/*.
+$ rostopic echo /rgb_to_depth/image_raw # This should print the camera image in real time.
+```
+Check out https://github.com/microsoft/Azure_Kinect_ROS_Driver/blob/melodic/docs/usage.md for more information.
+
+### Some handy tools
+- Azure's official camera viewer: `$ k4aviewer`
+- Use ROS to visualized published camera images: `$ rqt_image_view`
 
 ## Teleoperation
 We use SpaceMouse to teleop the franka arm. (credit to https://github.com/columbia-ai-robotics/diffusion_policy)
