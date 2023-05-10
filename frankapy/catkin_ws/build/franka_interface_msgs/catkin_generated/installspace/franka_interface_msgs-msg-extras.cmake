@@ -1,2 +1,0 @@
-set(franka_interface_msgs_MESSAGE_FILES "msg/Errors.msg;msg/FrankaInterfaceStatus.msg;msg/RobotState.msg;msg/RunLoopProcessInfoState.msg;msg/SensorData.msg;msg/SensorDataGroup.msg;msg/ExecuteSkillAction.msg;msg/ExecuteSkillActionGoal.msg;msg/ExecuteSkillActionResult.msg;msg/ExecuteSkillActionFeedback.msg;msg/ExecuteSkillGoal.msg;msg/ExecuteSkillResult.msg;msg/ExecuteSkillFeedback.msg")
-set(franka_interface_msgs_SERVICE_FILES "srv/GetCurrentRobotStateCmd.srv;srv/GetCurrentFrankaInterfaceStatusCmd.srv")

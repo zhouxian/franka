@@ -2,3 +2,6 @@
 __pycache__
 .DS_Store
 ._.DS_Store
+catkin_ws/build/
+catkin_ws/devel/
+catkin_ws/logs/
