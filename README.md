@@ -75,7 +75,16 @@ There are some other useful scripts under `franka/frankapy/scripts/`.
 
 
 ### Guiding mode
-Press down the black button and hold the two black button at the gripper. Now you are able to drag the end-effector.
+There are two options.
+1. Press down the black button and hold the two black button at the gripper. Now you are able to drag the end-effector.
+2. Simply run python `frankapy/scripts/run_guide_mode.py`.
+
+### Changing workspace bounds
+If you want to override the default safety bounds, edit the following two files:
+```
+/home/zhouxian/git/franka-interface/franka-interface/include/franka-interface/termination_handler/termination_handler.h
+/home/zhouxian/git/franka/frankapy/frankapy/franka_constants.py
+```
 
 ### Trouble Shooting
 - Light
@@ -84,6 +93,7 @@ Press down the black button and hold the two black button at the gripper. Now yo
     - blue: unclocked
     - white: guiding mode
 - If the light does not light up, turn off both buttons and the control box, unplug power, and then turn on everything again.
+- If running `rviz` throws error saying qt version mismatch, that's probably caused by VRep/CoppeliaSim/RLBench, as it has its own qt. Comment out their path in `.bashrc` should resolve it.
 
 ## Camera
 We use Azure Kinect DK.

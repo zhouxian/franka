@@ -13,7 +13,7 @@ from scipy.spatial.transform import Rotation as R
 import rospy
 
 def activate(fa, duration=10):
-    fa.goto_pose(fa.get_pose(), duration=0.1, dynamic=True, buffer_time=duration,
+    fa.goto_pose(fa.get_pose(), duration=5, dynamic=True, buffer_time=duration,
         cartesian_impedances=FC.DEFAULT_TRANSLATIONAL_STIFFNESSES + FC.DEFAULT_ROTATIONAL_STIFFNESSES
     )
 
@@ -52,7 +52,8 @@ if __name__ == "__main__":
     pub = rospy.Publisher(FC.DEFAULT_SENSOR_PUBLISHER_TOPIC, SensorDataGroup, queue_size=1000)
     rate = rospy.Rate(1 / dt)
 
-    activate(fa, duration=60)
+    activate(fa, duration=100)
+    print('Activated...')
 
     max_pos_speed=0.15
     max_rot_speed=0.15
