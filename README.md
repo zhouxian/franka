@@ -182,6 +182,7 @@ We will use these two packages:
     If it throws some Qt errors, try `pip uninstall opencv-python; pip install opencv-python-headless`. If it still doesn't work, you can always calibrate manually. (Manual calibration is recommended if your camera pose can be easily measured.)
     Move the gripper around, collect samples, then compute.
     After you obtain the results, save them somewhere.
+    If you want to manually calibration, use measurement tools to make a initial good guess, then run `camera/manual_calibrate.py` to refine.
 
 After you are done with calibradion, run the static tf publisher to publish the relative pose between the robot and the camera:
 ```
