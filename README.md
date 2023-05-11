@@ -82,7 +82,9 @@ There are two options.
 ### Changing workspace bounds
 If you want to override the default safety bounds, edit the following two files:
 ```
-/home/zhouxian/git/franka-interface/franka-interface/include/franka-interface/termination_handler/termination_handler.h
+# on Control PC
+franka-interface/franka-interface/include/franka-interface/termination_handler/termination_handler.h
+# on FrankaPy PC
 /home/zhouxian/git/franka/frankapy/frankapy/franka_constants.py
 ```
 
@@ -131,7 +133,7 @@ Restart your terminal to let the updated `.bashrc` take effect.
 If the above installation was successful, you should be able to launch the camera with the following command:
 
 ```
-roslaunch azure_kinect_ros_driver kinect_rgbd.launch fps:=30 color_resolution:=720P
+roslaunch azure_kinect_ros_driver kinect_rgbd.launch fps:=30 color_resolution:=720P depth_unit:=32FC1
 ```
 This publishes camera signals to a bunch of ROS topics. To verify:
 
@@ -141,9 +143,50 @@ $ rostopic echo /rgb_to_depth/image_raw # This should print the camera image in 
 ```
 Check out https://github.com/microsoft/Azure_Kinect_ROS_Driver/blob/melodic/docs/usage.md for more information.
 
+We will be using rostopic `/rgb/image_raw` for rgb image and `/depth_to_rgb/image_raw` for aligned depth map.
+
 ### Some handy tools
 - Azure's official camera viewer: `$ k4aviewer`
 - Use ROS to visualized published camera images: `$ rqt_image_view`
+- See `camera/read_camera.py` for how to read the camera input in ROS.
+
+## Camera Calibration
+We will use these two packages:
+- http://wiki.ros.org/ar_track_alvar
+- https://github.com/IFL-CAMP/easy_handeye
+
+1. Download the markers here: http://wiki.ros.org/ar_track_alvar?action=AttachFile&do=view&target=markers0to8.png
+2. Print, pick your favourite one, and attach it to the robot's gripper.
+3. Install marker tracker:
+    Under your catkine workspace (e.g. `~/catkin_ws/src`):
+    ```
+    git clone https://github.com/machinekoder/ar_track_alvar.git -b noetic-devel
+    cd ..
+    catkin_make
+    ```
+4. Install hand eye calibration package following https://github.com/IFL-CAMP/easy_handeye
+5. Start camera
+    ```
+    roslaunch azure_kinect_ros_driver kinect_rgbd.launch fps:=30 color_resolution:=1080P depth_unit:=32FC1
+    ```
+6. Launch AR marker tracker
+    ```
+    cp camera/track_marker.launch ~/catkin_ws/src/ar_track_alvar/ar_track_alvar/launch/; roslaunch ar_track_alvar track_marker.launch
+    ```
+7. Run `rviz` to visualize point cloud and verify tracked marker.
+8. Start calibration
+    ```
+    cp camera/hand_eye_calibrate.launch ~/catkin_ws/src/ar_track_alvar/ar_track_alvar/launch/; roslaunch ar_track_alvar hand_eye_calibrate.launch
+    ```
+
+    If it throws some Qt errors, try `pip uninstall opencv-python; pip install opencv-python-headless`. If it still doesn't work, you can always calibrate manually. (Manual calibration is recommended if your camera pose can be easily measured.)
+    Move the gripper around, collect samples, then compute.
+    After you obtain the results, save them somewhere.
+
+After you are done with calibradion, run the static tf publisher to publish the relative pose between the robot and the camera:
+```
+    cp camera/publish.launch ~/catkin_ws/src/ar_track_alvar/ar_track_alvar/launch/; roslaunch ar_track_alvar publish.launch
+```
 
 ## Teleoperation
 We use SpaceMouse to teleop the franka arm. (credit to https://github.com/columbia-ai-robotics/diffusion_policy)

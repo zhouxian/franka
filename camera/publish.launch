@@ -1,0 +1,3 @@
+<launch>
+   <node pkg="tf" type="static_transform_publisher" name="hand_eye_broadcaster" args="1.10 -0.037 0.49 3.141592653 0.63 0.025 /panda_link0 /camera_base 100" />
+</launch>
