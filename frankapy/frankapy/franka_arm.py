@@ -1394,6 +1394,20 @@ class FrankaArm:
         """
         self.goto_gripper(FC.GRIPPER_WIDTH_MAX, block=block, skill_desc=skill_desc)
 
+    def open_gripper_tool(self, block=True, skill_desc='OpenGripper'):
+        """
+        Opens gripper to maximum width
+
+        Parameters
+        ----------
+            block : :obj:`bool`
+                Function blocks by default. If False, the function becomes
+                asynchronous and can be preempted.
+            skill_desc : :obj:`str` 
+                Skill description to use for logging on control-pc.
+        """
+        self.goto_gripper(0.055, block=block, skill_desc=skill_desc)
+
     def close_gripper(self, grasp=True, block=True, skill_desc='CloseGripper'):
         """
         Closes the gripper as much as possible
@@ -1409,6 +1423,24 @@ class FrankaArm:
                 Skill description to use for logging on control-pc.
         """
         self.goto_gripper(FC.GRIPPER_WIDTH_MIN, grasp=grasp,
+                          force=FC.GRIPPER_MAX_FORCE if grasp else None,
+                          block=block, skill_desc=skill_desc)
+
+    def close_gripper_soft(self, grasp=True, block=True, skill_desc='CloseGripper'):
+        """
+        Closes the gripper as much as possible
+
+        Parameters
+        ----------
+            grasp : :obj:`bool`
+                Flag that signals whether to grasp.
+            block : :obj:`bool`
+                Function blocks by default. If False, the function becomes
+                asynchronous and can be preempted.
+            skill_desc : :obj:`str` 
+                Skill description to use for logging on control-pc.
+        """
+        self.goto_gripper(0.034, grasp=False,
                           force=FC.GRIPPER_MAX_FORCE if grasp else None,
                           block=block, skill_desc=skill_desc)
 

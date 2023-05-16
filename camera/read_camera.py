@@ -24,7 +24,7 @@ def imgMsg2cv2(msg):
 
 def get_rgb():
     msg = rospy.wait_for_message("/rgb/image_rect_color", Image)
-    rgb = imgMsg2cv2(msg)
+    rgb = imgMsg2cv2(msg)[:, :, [2, 1, 0]]
     return rgb
 
 def get_depth():

@@ -10,6 +10,8 @@ if __name__ == '__main__':
     print('Starting robot')
     fa = FrankaArm()
 
+    fa.open_gripper()
+
     if args.use_pose:
         print('Reset with pose')
         fa.reset_pose()

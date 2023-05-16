@@ -45,23 +45,21 @@ if __name__ == "__main__":
 
     print('Ready...')
 
-    T = 5
-    dt = 0.02
-    ts = np.arange(0, T, dt)
 
+    dt = 0.02
     pub = rospy.Publisher(FC.DEFAULT_SENSOR_PUBLISHER_TOPIC, SensorDataGroup, queue_size=1000)
     rate = rospy.Rate(1 / dt)
 
-    activate(fa, duration=100)
+    activate(fa, duration=50)
     print('Activated...')
 
     max_pos_speed=0.15
-    max_rot_speed=0.15
+    max_rot_speed=0.25
 
     target_pose = fa.get_pose()
     gripper_open = True
 
-    with Spacemouse() as sm:
+    with Spacemouse(deadzone=0.3) as sm:
         while True:
             sm_state = sm.get_motion_state_transformed()
             # print(sm_state)
